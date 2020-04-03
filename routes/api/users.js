@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const k = process.env.secretOrKey || require('../../config/keys').secretOrKey;
 
 const validateRegisterInput = require('../../validations/register');
 const validateLoginInput = require('../../validations/login');
@@ -17,7 +19,7 @@ router.post('/register', (req, res) => {
     User.findOne({email: req.body.email})
         .then( user => {
             if (user) {
-                err.email = 'There is an account associated with that Email'
+                err.email = 'There is an account associated with that Email!'
             } else {
                 const newUser = new User({
                     name: req.body.name,
@@ -30,7 +32,20 @@ router.post('/register', (req, res) => {
                         if (err) throw err;
                         newUser.password = hash;
                         newUser.save()
-                            .then( user => res.json(user))
+                            .then( user => {
+                                const payload = { id: user.id, userName: user.name };
+
+                                jwt.sign(payload,
+                                    k,
+                                    { expiresIn: 3600},
+                                    (err, token) =>{
+                                    res.json({
+                                        success: true,
+                                        token: 'Bearer ' + token,
+                                    });
+                                });
+
+                            })
                             .catch( err => console.log(err));
                     } )
                 })
@@ -56,6 +71,19 @@ router.post('/login', (req, res) => {
                 .then(isMatch => {
                     if (isMatch) {
                         res.json({msg: 'Sucessfully Logged In!'})
+
+                        const payload = { id: user.id, userName: user.name };
+
+                        jwt.sign(
+                            payload,
+                            k,
+                            {expiresIn: 3600},
+                            (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: 'Bearer ' + token,
+                                });
+                            });
                     } else {
                         err.password = 'Incorrect Password'
                         return res.status(400).json(err)
