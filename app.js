@@ -4,6 +4,12 @@ const app = express();
 const db = process.env.MONGO_URI || require('./config/keys').mongoURI;
 const users = require("./routes/api/users");
 const weapons = require('./routes/api/weapons');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
 
 mongoose
     .connect(db, { useNewUrlParser: true })
