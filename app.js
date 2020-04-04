@@ -5,6 +5,11 @@ const db = process.env.MONGO_URI || require('./config/keys').mongoURI;
 const users = require("./routes/api/users");
 const weapons = require('./routes/api/weapons');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const jwtStrat = require('./config/passport');
+
+app.use(passport.initialize());
+jwtStrat(passport);
 
 app.use(bodyParser.urlencoded({
     extended: false

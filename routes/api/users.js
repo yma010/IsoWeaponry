@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const k = process.env.secretOrKey || require('../../config/keys').secretOrKey;
 
 const validateRegisterInput = require('../../validations/register');
 const validateLoginInput = require('../../validations/login');
 const User = require('../../models/User');
 
-
+//USER AUTH ROUTES
 router.post('/register', (req, res) => {
     const {err, isValid} = validateRegisterInput(req.body);
 
@@ -52,7 +53,6 @@ router.post('/register', (req, res) => {
             }
         }) 
 })
-
 router.post('/login', (req, res) => {
     const { err, isValid } = validateLoginInput(req.body);
     if(!isValid) {
@@ -70,8 +70,6 @@ router.post('/login', (req, res) => {
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
                     if (isMatch) {
-                        res.json({msg: 'Sucessfully Logged In!'})
-
                         const payload = { id: user.id, userName: user.name };
 
                         jwt.sign(
@@ -92,6 +90,12 @@ router.post('/login', (req, res) => {
         })
 })
 
+//PRIVATE
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const { id, name, email } = req.user;
+    res.json({id, name, email});
+});
+//TEST ROUTE
 router.get("/test", (req, res) => res.json({
     msg: "This is the users route"
 }));
