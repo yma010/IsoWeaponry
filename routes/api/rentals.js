@@ -4,10 +4,10 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const Weapons = require('../../models/Weapon');
+const Rentals = require('../../models/Rental');
 
 router.get("/test", (req, res) => res.json({
-    msg: "This is the weapons route"
+    msg: "This is the rentals route"
 }));
 
 module.exports = router;

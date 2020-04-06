@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const app = express();
 const db = process.env.MONGO_URI || require('./config/keys').mongoURI;
 const users = require("./routes/api/users");
-const weapons = require('./routes/api/weapons');
+const rentals = require('./routes/api/rentals');
+const admins = require('./routes/api/admins');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const jwtStrat = require('./config/passport');
@@ -24,8 +25,8 @@ mongoose
 app.get('/', (req, res) => res.send("Hello World"));
 
 app.use('/api/users', users);
-app.use('/api/weapons', weapons);
-
+app.use('/api/rentals', rentals);
+app.use('/api/admin', admins);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server is listening on port ${port}`));

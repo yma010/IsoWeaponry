@@ -5,13 +5,17 @@ module.exports = function validateLoginInput(data) {
     let err = {};
 
 
-    data.name = validText(data.name) ? data.name : ' ';
+    data.fName = validText(data.fName) ? data.fName : ' ';
+    data.lName = validText(data.lName) ? data.lName : ' ';
     data.email = validText(data.email) ? data.email : ' ';
     data.password1 = validText(data.password1) ? data.password1 : ' ';
     data.password2 = validText(data.password2) ? data.password2 : ' ';
 
-    if (Validator.isEmpty(data.name)) {
-        err.name = 'Please enter your name'
+    if (Validator.isEmpty(data.fName)) {
+        err.name = 'Please enter your first name'
+    }
+    if (Validator.isEmpty(data.lName)) {
+        err.name = 'Please enter your last name'
     }
     if (!Validator.isEmail(data.email)) {
         err.email = 'Email is invalid'

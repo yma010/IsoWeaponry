@@ -5,11 +5,13 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const k = process.env.secretOrKey || require('../../config/keys').secretOrKey;
 
-const validateRegisterInput = require('../../validations/register');
-const validateLoginInput = require('../../validations/login');
-const User = require('../../models/User');
+const Admin = require('./../../models/Admin');
 
-//USER AUTH ROUTES
+router.get("/test", (req, res) => res.json({
+    msg: "This is the admins route"
+}));
+
+//Admin AUTH ROUTES
 router.post('/register', (req, res) => {
     const {err, isValid} = validateRegisterInput(req.body);
 
@@ -17,14 +19,13 @@ router.post('/register', (req, res) => {
         return res.status(400).json(err);
     }
 
-    User.findOne({email: req.body.email})
-        .then( user => {
-            if (user) {
+    Admin.findOne({email: req.body.email})
+        .then( admin => {
+            if (admin) {
                 err.email = 'There is an account associated with that Email!'
             } else {
-                const newUser = new User({
-                    fName: req.body.fName,
-                    lName: req.body.lName,
+                const newAdmin = new Admin({
+                    name: req.body.name,
                     email: req.body.email,
                     password: req.body.password1,
                 })
@@ -91,15 +92,9 @@ router.post('/login', (req, res) => {
         })
 })
 
-//PRIVATE
 router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
     const { id, name, email } = req.user;
     res.json({id, name, email});
 });
-//TEST ROUTE
-router.get("/test", (req, res) => res.json({
-    msg: "This is the users route"
-}));
 
 module.exports = router;
-
