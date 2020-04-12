@@ -21,5 +21,15 @@ router.get('/index', (req, res) => {
                 return res.json(rentalsObj)
             }
         )
-})
+});
+
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+
+    Rentals.findById(id)
+        .then((rental) => {
+            res.json({rental : rental})
+        });
+});
+
 module.exports = router;
