@@ -96,10 +96,6 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     const { id, name, email } = req.user;
     res.json({id, name, email});
 });
-//TEST ROUTE
-router.get("/test", (req, res) => res.json({
-    msg: "This is the users route"
-}));
 
 module.exports = router;
 
