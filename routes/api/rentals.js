@@ -1,14 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongodb').ObjectID;
 const mongoose = require('mongoose');
 const passport = require('passport');
 const validateNewProduct = require('../../validations/rental/register');
 const Rentals = require('../../models/Rental');
-
-router.get("/test", (req, res) => res.json({
-    msg: "This is the rentals route"
-}));
+const ObjectID = require('mongodb').ObjectID;
 
 router.get('/index', (req, res) => {
     Rentals.find()
@@ -61,9 +57,7 @@ router.post('/register',
 
 router.put('/edit/:id', (req, res) => {
     const rentalVal = req.body;
-    console.log(rentalVal);
     const rentalId = req.body._id;
-    console.log(rentalId);
     mongoose.set('useFindAndModify', false);
 
     Rentals.findByIdAndUpdate(
