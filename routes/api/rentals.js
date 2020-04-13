@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const ObjectID = require('mongodb').ObjectID;
 const mongoose = require('mongoose');
 const passport = require('passport');
 const validateNewProduct = require('../../validations/rental/register');
@@ -58,6 +58,23 @@ router.post('/register',
             )
     }
 );
+
+router.put('/edit/:id', (req, res) => {
+    const rentalVal = req.body;
+    console.log(rentalVal);
+    const rentalId = req.body._id;
+    console.log(rentalId);
+    mongoose.set('useFindAndModify', false);
+
+    Rentals.findByIdAndUpdate(
+        rentalId,
+        rentalVal,
+        { new: true }
+    ).then(rental => res.json({
+        rental: rental
+    }));
+
+})
 
 
 module.exports = router;
