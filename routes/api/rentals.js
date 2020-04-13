@@ -3,7 +3,7 @@ const router = express.Router();
 
 const mongoose = require('mongoose');
 const passport = require('passport');
-
+const validateNewProduct = require('../../validations/rental/register');
 const Rentals = require('../../models/Rental');
 
 router.get("/test", (req, res) => res.json({
@@ -31,5 +31,33 @@ router.get('/:id', (req, res) => {
             res.json({rental : rental})
         });
 });
+
+
+router.post('/register',
+    passport.authenticate('jwt', {session: false}), (req,res) => {
+        const { err, isValid} = validateNewProduct(req.body);
+        if (!isValid) {
+            return res.status(400).json(err);
+        }
+        const newRental = new Rental({
+            model: req.body.model,
+            weight: req.body.weight,
+            length: req.body.length,
+            price: req.body.price,
+            category: req.body.category,
+            picture: req.body.picture,
+        });
+
+        newRental.save()
+            .then( rental => {
+                return res.json({
+                    rental: rental,
+                })})
+            .catch(
+                err => console.log( err )
+            )
+    }
+);
+
 
 module.exports = router;
