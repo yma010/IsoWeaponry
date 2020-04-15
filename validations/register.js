@@ -37,10 +37,10 @@ module.exports = function validateLoginInput(data) {
     if (Validator.isEmpty(data.password1)) {
         err.password1 = 'Password field is required'
     }
-    if (Validator.isLength(data.zip, {min: 5, max: 6})) {
+    if (!Validator.isLength(data.zip, {min: 5, max: 6})) {
         err.zip = 'Invalid Zip Code'
     }
-    if (Validator.isLength(data.password1, {min: 6, max: 30})){
+    if (!Validator.isLength(data.password1, {min: 6, max: 30})){
         err.password1 = 'Password must be at least 6 characters';
     }
     if (Validator.isEmpty(data.password2)) {

@@ -12,7 +12,6 @@ const User = require('../../models/User');
 //USER AUTH ROUTES
 router.post('/register', (req, res) => {
     const {err, isValid} = validateRegisterInput(req.body);
-                    console.log(req.body)
 
     if(!isValid) {
         return res.status(400).json(err);
@@ -31,6 +30,7 @@ router.post('/register', (req, res) => {
                     street: req.body.street,
                     state: req.body.state,
                     zip: req.body.zip,
+                    birthdate: req.body.birthdate,
                 })
 
                 bcrypt.genSalt(10, (err, salt) => {
