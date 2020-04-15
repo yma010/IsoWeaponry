@@ -23,7 +23,15 @@ const UserSchema = new Schema ({
         type: Date,
         required: true,
     },
-    address: {
+    street: {
+        type: String,
+        required: true,
+    },
+    state: {
+        type: String,
+        required: true,
+    },
+    zip: {
         type: String,
         required: true,
     },
