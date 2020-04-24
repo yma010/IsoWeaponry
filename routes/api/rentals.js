@@ -11,7 +11,8 @@ router.get('/index', (req, res) => {
         .then(
             rentals => {
                 const rentalsObj = {};
-                rentals.forEach(rental =>
+                rentals.forEach((rental) =>
+                    
                     rentalsObj[rental._id] = rental
                 );
                 return res.json(rentalsObj)
